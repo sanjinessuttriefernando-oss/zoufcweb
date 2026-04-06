@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZONA UFC | Quiénes Somos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #e0e0e0; overflow-x: hidden; }
+        :root { --red: #d32f2f; --black: #000; --red-glow: rgba(211,47,47,0.6); }
+
+        /* Navbar (igual que el index) */
+        .navbar-custom { background: var(--black) !important; border-bottom: 3px solid var(--red); padding: 1rem 0; transition: all 0.3s; }
+        .navbar-brand { font-weight: 800; font-size: 1.8rem; color: white !important; }
+        .navbar-brand i { color: var(--red); margin-right: 10px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { text-shadow: 0 0 0 var(--red); } 100% { text-shadow: 0 0 8px var(--red); } }
+        .nav-link { font-weight: 600; text-transform: uppercase; color: rgba(255,255,255,0.9) !important; margin: 0 0.5rem; transition: 0.3s; position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--red) !important; }
+
+        /* Hero con video */
+        .hero-quienes {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+        .hero-quienes video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(211,47,47,0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .hero-overlay h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(211,47,47,0.8);
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero-overlay h1 span { color: var(--red); }
+        .hero-overlay p {
+            font-size: 1.3rem;
+            animation: fadeInUp 1s 0.2s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sección de valores con tarjetas */
+        .value-card {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid var(--red);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            height: 100%;
+            backdrop-filter: blur(5px);
+        }
+        .value-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--red);
+            box-shadow: 0 15px 30px rgba(211,47,47,0.4);
+        }
+        .value-card i {
+            font-size: 3rem;
+            color: var(--red);
+            margin-bottom: 1rem;
+        }
+        .value-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .value-card p { color: #ccc; }
+
+        /* Contadores */
+        .counter-section {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            border-top: 2px solid var(--red);
+            border-bottom: 2px solid var(--red);
+            padding: 60px 0;
+            margin: 60px 0;
+        }
+        .counter-box { text-align: center; padding: 20px; }
+        .counter-box i { font-size: 3rem; color: var(--red); margin-bottom: 1rem; }
+        .counter { font-size: 3rem; font-weight: 800; color: white; }
+        .counter-title { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; color: #aaa; }
+
+        /* Equipo (flip cards) */
+        .team-card {
+            perspective: 1000px;
+            height: 380px;
+            margin-bottom: 30px;
+        }
+        .team-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 20px;
+        }
+        .team-card:hover .team-card-inner { transform: rotateY(180deg); }
+        .team-front, .team-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--red);
+        }
+        .team-front {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .team-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .team-front h3 {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(211,47,47,0.9), transparent);
+            padding: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 0;
+            color: white;
+        }
+        .team-back {
+            background: var(--red);
+            color: black;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .team-back h3 { font-weight: 800; margin-bottom: 1rem; text-transform: uppercase; color: white; }
+        .team-back p { font-size: 0.9rem; color: #111; }
+
+        /* Cita (testimonio) */
+        .quote-section {
+            background: url('https://images.pexels.com/photos/26044780/pexels-photo-26044780.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover fixed;
+            position: relative;
+            padding: 100px 0;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .quote-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+        }
+        .quote-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-left: 4px solid var(--red);
+            border-right: 4px solid var(--red);
+        }
+        .quote-content i { font-size: 3rem; color: var(--red); margin-bottom: 1rem; }
+        .quote-content p { font-size: 1.5rem; font-weight: 500; font-style: italic; }
+        .quote-author { margin-top: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Footer (igual al index) */
+        .footer { background: var(--black); border-top: 3px solid var(--red); padding: 3rem 0 1rem; margin-top: 2rem; }
+        .footer h5 { color: var(--red); font-weight: 700; margin-bottom: 1.5rem; }
+        .footer a { color: #aaa; text-decoration: none; transition: 0.3s; }
+        .footer a:hover { color: var(--red); padding-left: 5px; }
+        .footer .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #1a1a1a; border-radius: 50%; color: white; font-size: 1.2rem; margin-right: 10px; border: 1px solid var(--red); transition: 0.3s; }
+        .footer .social-icons a:hover { background: var(--red); color: black; transform: translateY(-3px); box-shadow: 0 0 10px var(--red); }
+
+        @media (max-width: 768px) {
+            .hero-quienes { height: 50vh; }
+            .hero-overlay h1 { font-size: 2.5rem; }
+            .counter { font-size: 2rem; }
+            .team-card { height: 280px; }
+            .quote-content p { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-fist-fill"></i> ZONA UFC
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="quienes-somos.html">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO CON VIDEO -->
+    <section class="hero-quienes">
+        <video autoplay muted loop playsinline>
+            <source src="ufcmomentos.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay">
+            <div>
+                <h1>Más que una página, <span>una hermandad</span></h1>
+                <p>Pasión, dedicación y respeto por las MMA</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MISIÓN, VISIÓN Y VALORES -->
+    <div class="container section-padding" style="padding-top: 0;">
+        <div class="row g-4" data-aos="fade-up">
+            <div class="col-md-4">
+                <div class="value-card">
+                    <i class="bi bi-bullseye"></i>
+                    <h3>Misión</h3>
+                    <p>Informar y entretener a los aficionados de las MMA con contenido de calidad, análisis profundos y cobertura en vivo de todos los eventos de la UFC.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <i class="bi bi-eye"></i>
+                    <h3>Visión</h3>
+                    <p>Ser la comunidad hispana más grande y respetada de seguidores de la UFC, reconocida por su pasión y conocimiento.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <i class="bi bi-heart-fill"></i>
+                    <h3>Valores</h3>
+                    <p>Respeto, disciplina, pasión, transparencia y compromiso con nuestra comunidad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTADORES (DATOS CLAVE) -->
+    <div class="counter-section" data-aos="fade-up">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-calendar2-week"></i>
+                    <div class="counter" data-target="8">0</div>
+                    <div class="counter-title">Años de experiencia</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-trophy"></i>
+                    <div class="counter" data-target="356">0</div>
+                    <div class="counter-title">Eventos cubiertos</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-people"></i>
+                    <div class="counter" data-target="124">0</div>
+                    <div class="counter-title">Peleadores analizados</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-globe2"></i>
+                    <div class="counter" data-target="15">0</div>
+                    <div class="counter-title">Países alcanzados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUESTRO EQUIPO (flip cards) -->
+    <div class="container">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Nuestro Equipo</h2>
+            <p>Los rostros detrás de ZONA UFC</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6" data-aos="flip-left" data-aos-delay="100">
+                <div class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-front">
+                            <img src="..//UFC/img/rodriguez.jpg" alt="rodríguez">
+                            <h3>Carlos Rodríguez</h3>
+                        </div>
+                        <div class="team-back">
+                            <h3>Carlos Rodríguez</h3>
+                            <p>Fundador & Editor Principal</p>
+                            <i class="bi bi-mic"></i> 10 años en cobertura MMA
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="flip-left" data-aos-delay="200">
+                <div class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-front">
+                            <img src="..//UFC/img/lopezm.jpg" alt="lopezm">
+                            <h3>Mariana López</h3>
+                        </div>
+                        <div class="team-back">
+                            <h3>Mariana López</h3>
+                            <p>Analista Técnica</p>
+                            <i class="bi bi-camera-reels"></i> Desgloses de pelea
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="flip-left" data-aos-delay="300">
+                <div class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-front">
+                            <img src="..//UFC/img/javierm.jpg" alt="javierm">
+                            <h3>Javier Méndez</h3>
+                        </div>
+                        <div class="team-back">
+                            <h3>Javier Méndez</h3>
+                            <p>Periodista & Entrevistador</p>
+                            <i class="bi bi-chat-dots"></i> Rostros del octágono
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="flip-left" data-aos-delay="400">
+                <div class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-front">
+                            <img src="..//UFC/img/lauraflores.jpg" alt="lauraflores">
+                            <h3>Laura Flores</h3>
+                        </div>
+                        <div class="team-back">
+                            <h3>Laura Flores</h3>
+                            <p>Redes Sociales & Comunidad</p>
+                            <i class="bi bi-instagram"></i> Conexión con los fans
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="contacto.html" class="btn btn-outline-danger btn-lg px-5" style="border-radius: 50px;">Únete al equipo <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- CITA ÉPICA (TESTIMONIO) -->
+    <div class="quote-section" data-aos="zoom-in">
+        <div class="quote-content">
+            <i class="bi bi-quote"></i>
+            <p>"ZONA UFC no solo informa, respira cada golpe, cada sumisión. Son la voz de los que vivimos este deporte con pasión."</p>
+            <div class="quote-author">— Dana White, Presidente de UFC</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5><i class="bi bi-fist-fill me-2"></i>ZONA UFC</h5>
+                    <p>Tu portal de confianza para todo lo relacionado con la mejor liga de MMA del mundo.</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i> info@ufczone.com</li>
+                        <li><i class="bi bi-telephone me-2"></i> +591 76583233</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> La Paz, Bolivia</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Síguenos</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4" style="border-color: var(--red);">
+            <div class="text-center text-white-50">
+                <small>© 2026 ZONA UFC - Todos los derechos reservados.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+
+        // Contadores animados
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        const startCounting = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounting();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(document.querySelector('.counter-section'));
+    </script>
+</body>
+</html>

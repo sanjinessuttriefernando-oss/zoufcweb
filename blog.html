@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZONA UFC | Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #e0e0e0; overflow-x: hidden; }
+        :root { --red: #d32f2f; --black: #000; --red-glow: rgba(211,47,47,0.6); }
+
+        /* Navbar (igual al index) */
+        .navbar-custom { background: var(--black) !important; border-bottom: 3px solid var(--red); padding: 1rem 0; transition: all 0.3s; }
+        .navbar-brand { font-weight: 800; font-size: 1.8rem; color: white !important; }
+        .navbar-brand i { color: var(--red); margin-right: 10px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { text-shadow: 0 0 0 var(--red); } 100% { text-shadow: 0 0 8px var(--red); } }
+        .nav-link { font-weight: 600; text-transform: uppercase; color: rgba(255,255,255,0.9) !important; margin: 0 0.5rem; transition: 0.3s; position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--red) !important; }
+
+        /* Hero con video */
+        .hero-blog {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+        .hero-blog video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(211,47,47,0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .hero-overlay h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(211,47,47,0.8);
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero-overlay h1 span { color: var(--red); }
+        .hero-overlay p {
+            font-size: 1.3rem;
+            animation: fadeInUp 1s 0.2s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sección principal */
+        .section-padding { padding: 80px 0; }
+        .section-title { text-align: center; margin-bottom: 3rem; }
+        .section-title h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--red);
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            background: linear-gradient(45deg, #fff, var(--red));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+        }
+        .section-title p { font-size: 1.2rem; color: #ccc; margin-top: 1rem; }
+
+        /* Artículo destacado (hero) */
+        .featured-post {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 4rem;
+            border: 1px solid var(--red);
+            transition: transform 0.3s;
+        }
+        .featured-post:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(211,47,47,0.3); }
+        .featured-post img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            filter: brightness(0.6);
+            transition: transform 0.6s;
+        }
+        .featured-post:hover img { transform: scale(1.02); }
+        .featured-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 3rem;
+            color: white;
+        }
+        .featured-content .badge { background: var(--red); margin-bottom: 1rem; }
+        .featured-content h2 { font-size: 2.5rem; font-weight: 800; text-shadow: 0 2px 5px black; }
+        .featured-content p { font-size: 1.1rem; }
+        .featured-content a { color: var(--red); text-decoration: none; font-weight: 700; }
+
+        /* Tarjetas de blog mejoradas */
+        .blog-card {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid var(--red);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            height: 100%;
+            backdrop-filter: blur(5px);
+        }
+        .blog-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--red);
+            box-shadow: 0 20px 40px rgba(211,47,47,0.4);
+        }
+        .blog-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+        .blog-card:hover img { transform: scale(1.05); }
+        .blog-card .card-body { padding: 1.5rem; }
+        .blog-card h5 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+        }
+        .blog-card .date {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+        .blog-card p { color: #ccc; }
+        .blog-card a {
+            color: var(--red);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        .blog-card a:hover { letter-spacing: 1px; transform: translateX(5px); }
+
+        /* Categorías (badges) */
+        .category-section { margin-bottom: 3rem; }
+        .category-badge {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--red);
+            color: var(--red);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            margin: 0.3rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .category-badge:hover {
+            background: var(--red);
+            color: black;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(211,47,47,0.4);
+        }
+
+        /* Contador */
+        .counter-section {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            border-top: 2px solid var(--red);
+            border-bottom: 2px solid var(--red);
+            padding: 60px 0;
+            margin: 60px 0;
+        }
+        .counter-box { text-align: center; padding: 20px; }
+        .counter-box i { font-size: 3rem; color: var(--red); margin-bottom: 1rem; }
+        .counter { font-size: 3rem; font-weight: 800; color: white; }
+        .counter-title { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; color: #aaa; }
+
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, #111, #1f1f1f);
+            border: 1px solid var(--red);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .newsletter-section h3 { color: var(--red); font-weight: 800; margin-bottom: 1rem; }
+        .newsletter-section .input-group { max-width: 500px; margin: 0 auto; }
+        .newsletter-section .form-control {
+            background: #000;
+            border: 1px solid var(--red);
+            color: white;
+            padding: 0.75rem;
+        }
+        .newsletter-section .btn-danger { background: var(--red); border: none; padding: 0.75rem 1.5rem; }
+
+        /* Footer */
+        .footer { background: var(--black); border-top: 3px solid var(--red); padding: 3rem 0 1rem; margin-top: 2rem; }
+        .footer h5 { color: var(--red); font-weight: 700; margin-bottom: 1.5rem; }
+        .footer a { color: #aaa; text-decoration: none; transition: 0.3s; }
+        .footer a:hover { color: var(--red); padding-left: 5px; }
+        .footer .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #1a1a1a; border-radius: 50%; color: white; font-size: 1.2rem; margin-right: 10px; border: 1px solid var(--red); transition: 0.3s; }
+        .footer .social-icons a:hover { background: var(--red); color: black; transform: translateY(-3px); box-shadow: 0 0 10px var(--red); }
+
+        @media (max-width: 768px) {
+            .hero-blog { height: 50vh; }
+            .hero-overlay h1 { font-size: 2.5rem; }
+            .featured-post img { height: 300px; }
+            .featured-content { padding: 1.5rem; }
+            .featured-content h2 { font-size: 1.5rem; }
+            .counter { font-size: 2rem; }
+            .section-title h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-fist-fill"></i> ZONA UFC
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quienes-somos.html">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO CON VIDEO -->
+    <section class="hero-blog">
+        <video autoplay muted loop playsinline>
+            <source src="ufcmomentos.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay">
+            <div>
+                <h1>Noticias <span>ZONA UFC</span></h1>
+                <p>La información más actualizada del octágono</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTADOR DE ARTÍCULOS -->
+    <div class="counter-section" data-aos="fade-up">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-newspaper"></i>
+                    <div class="counter" data-target="142">0</div>
+                    <div class="counter-title">Artículos publicados</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-chat-dots"></i>
+                    <div class="counter" data-target="850">0</div>
+                    <div class="counter-title">Comentarios</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-eye"></i>
+                    <div class="counter" data-target="12500">0</div>
+                    <div class="counter-title">Visitas totales</div>
+                </div>
+                <div class="col-md-3 col-6 counter-box">
+                    <i class="bi bi-share"></i>
+                    <div class="counter" data-target="3420">0</div>
+                    <div class="counter-title">Compartidos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORÍAS DESTACADAS -->
+    <div class="container category-section" data-aos="fade-up">
+        <div class="text-center">
+            <a href="#" class="category-badge">Noticias</a>
+            <a href="#" class="category-badge">Análisis</a>
+            <a href="#" class="category-badge">Entrevistas</a>
+            <a href="#" class="category-badge">Eventos</a>
+            <a href="#" class="category-badge">Rankings</a>
+            <a href="#" class="category-badge">Opinión</a>
+        </div>
+    </div>
+
+    <!-- ARTÍCULO DESTACADO -->
+    <div class="container" data-aos="fade-up">
+        <div class="featured-post">
+            <img src="img/ufc328.jpg" alt="UFC 328">
+            <div class="featured-content">
+                <span class="badge">Destacado</span>
+                <h2>UFC 328: Chimaev vs Strickland - Todo lo que necesitas saber</h2>
+                <p>La cartelera estelar promete una noche épica. Detalles de la pelea, horarios y cómo verlo en vivo.</p>
+                <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTADO DE NOTICIAS -->
+    <div class="container section-padding" style="padding-top: 0;">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Últimas Noticias</h2>
+            <p>Entérate de todo lo que pasa en el octágono</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="blog-card">
+                    <img src="img/vallejos.jpg" alt="Kevin Vallejos">
+                    <div class="card-body">
+                        <h5>Kevin Vallejos vs Josh Emmett</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 16 Marzo 2026</div>
+                        <p>UFC FIGHT NIGHT: Vallejos suma un triunfo clave y piensa en el próximo peso.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="blog-card">
+                    <img src="img/casablanca.jpg" alt="Topuria vs Gaethje">
+                    <div class="card-body">
+                        <h5>Topuria vs Gaethje: fecha confirmada</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 14 junio 2026</div>
+                        <p>El español Ilia Topuria se enfrentará a Justin Gaethje por el título peso ligero en la Casa Blanca.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="blog-card">
+                    <img src="img/BMF.webp" alt="Charles Oliveira BMF">
+                    <div class="card-body">
+                        <h5>Charles Oliveira es el nuevo BMF</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 1 Marzo 2026</div>
+                        <p>Oliveira derrota a Holloway para arrebatarle el cinturón BMF con un dominio total en los 5 asaltos.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="blog-card">
+                    <img src="img/donaldtrump.jpeg" alt="UFC Freedom 250">
+                    <div class="card-body">
+                        <h5>UFC Freedom 250: White House</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 14 junio 2026</div>
+                        <p>La velada tendrá lugar en la residencia presidencial en Washington, D.C. coincidiendo con el 80º cumpleaños de Donald Trump.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="blog-card">
+                    <img src="img/mcgregor.jpeg" alt="Regreso Conor McGregor">
+                    <div class="card-body">
+                        <h5>El regreso de Conor McGregor</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 20 Febrero 2026</div>
+                        <p>Tras una sanción y lesiones, Conor McGregor apunta a pelear el 11 de julio en la International Fight Week.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="blog-card">
+                    <img src="img/noticiasufc.jpg" alt="Noticia destacada">
+                    <div class="card-body">
+                        <h5>UFC anuncia nuevo peso pluma</h5>
+                        <div class="date"><i class="bi bi-calendar"></i> 10 Febrero 2026</div>
+                        <p>La organización confirma la creación de una nueva división para 2027. Detalles exclusivos.</p>
+                        <a href="#">Leer más <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="#" class="btn btn-outline-danger btn-lg px-5" style="border-radius: 50px;">Cargar más noticias <i class="bi bi-arrow-repeat"></i></a>
+        </div>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <div class="container newsletter-section" data-aos="zoom-in">
+        <h3><i class="bi bi-envelope-paper-fill"></i> Recibe las noticias primero</h3>
+        <p>Suscríbete a nuestro newsletter y entérate de todo antes que nadie.</p>
+        <div class="input-group">
+            <input type="email" class="form-control" placeholder="Tu correo electrónico">
+            <button class="btn btn-danger" type="button">Suscribirme</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5><i class="bi bi-fist-fill me-2"></i>ZONA UFC</h5>
+                    <p>Tu portal de confianza para todo lo relacionado con la mejor liga de MMA del mundo.</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i> info@ufczone.com</li>
+                        <li><i class="bi bi-telephone me-2"></i> +591 76583233</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> La Paz, Bolivia</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Síguenos</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4" style="border-color: var(--red);">
+            <div class="text-center text-white-50">
+                <small>© 2026 ZONA UFC - Todos los derechos reservados.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+
+        // Contadores animados
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        const startCounting = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounting();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(document.querySelector('.counter-section'));
+    </script>
+</body>
+</html>
